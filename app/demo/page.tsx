@@ -69,11 +69,11 @@ export default function DemoPage() {
               <div className="space-y-2">
                 <h4 className="font-medium">Sample Questions to Try:</h4>
                 <ul className="space-y-1 text-sm text-gray-600">
-                  <li>• "How do I reset my password?"</li>
-                  <li>• "What are your pricing plans?"</li>
-                  <li>• "How do I upgrade my account?"</li>
-                  <li>• "I'm having trouble logging in"</li>
-                  <li>• "How do I cancel my subscription?"</li>
+                  <li>• &ldquo;How do I reset my password?&rdquo;</li>
+                  <li>• &ldquo;What are your pricing plans?&rdquo;</li>
+                  <li>• &ldquo;How do I upgrade my account?&rdquo;</li>
+                  <li>• &ldquo;I&rsquo;m having trouble logging in&rdquo;</li>
+                  <li>• &ldquo;How do I cancel my subscription?&rdquo;</li>
                 </ul>
               </div>
               <Button
@@ -162,7 +162,7 @@ export default function DemoPage() {
 
         {/* Footer */}
         <div className="text-muted-foreground text-center text-sm">
-          <p>This is a demo of flowdesk's AI-powered support system</p>
+          <p>This is a demo of flowdesk&rsquo;s AI-powered support system</p>
           <p className="mt-1">
             Powered by{" "}
             <span className="text-primary font-medium">flowdesk AI</span>
@@ -173,7 +173,7 @@ export default function DemoPage() {
       {/* Chat Widget */}
       <ChatWidget
         organizationId="demo-org"
-        welcomeMessage="Hi! I'm your AI support assistant. How can I help you today?"
+        welcomeMessage="Hi! I&rsquo;m your AI support assistant. How can I help you today?"
         isOpen={isChatOpen}
         onToggle={() => setIsChatOpen(!isChatOpen)}
       />

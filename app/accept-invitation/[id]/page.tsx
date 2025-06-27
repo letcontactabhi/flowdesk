@@ -1,5 +1,6 @@
 "use client"
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -18,19 +19,30 @@ import { toast } from "sonner"
 export default function AcceptInvitationPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
   const [isAccepting, setIsAccepting] = useState(false)
   const [invitation, setInvitation] = useState<any>(null)
   const [error, setError] = useState<string>("")
+  const [id, setId] = useState<string>("")
 
   useEffect(() => {
+    const getParams = async () => {
+      const resolvedParams = await params
+      setId(resolvedParams.id)
+    }
+    getParams()
+  }, [params])
+
+  useEffect(() => {
+    if (!id) return
+
     const fetchInvitation = async () => {
       try {
         const result = await organization.getInvitation({
-          invitationId: params.id,
+          query: { id },
         })
 
         if (result.data) {
@@ -38,27 +50,31 @@ export default function AcceptInvitationPage({
         } else {
           setError("Invitation not found or has expired")
         }
-      } catch (err: any) {
-        setError(err.message || "Failed to load invitation")
+      } catch (err: unknown) {
+        setError(
+          err instanceof Error ? err.message : "Failed to load invitation"
+        )
       } finally {
         setIsLoading(false)
       }
     }
 
     fetchInvitation()
-  }, [params.id])
+  }, [id])
 
   const handleAcceptInvitation = async () => {
     setIsAccepting(true)
     try {
       await organization.acceptInvitation({
-        invitationId: params.id,
+        invitationId: id,
       })
 
       toast.success("Successfully joined the organization!")
       router.push("/dashboard")
-    } catch (err: any) {
-      toast.error(err.message || "Failed to accept invitation")
+    } catch (err: unknown) {
+      toast.error(
+        err instanceof Error ? err.message : "Failed to accept invitation"
+      )
     } finally {
       setIsAccepting(false)
     }
@@ -68,8 +84,10 @@ export default function AcceptInvitationPage({
     try {
       // For now, just redirect back - you might want to implement a decline endpoint
       router.push("/signin")
-    } catch (err: any) {
-      toast.error(err.message || "Failed to decline invitation")
+    } catch (err: unknown) {
+      toast.error(
+        err instanceof Error ? err.message : "Failed to decline invitation"
+      )
     }
   }
 
@@ -123,9 +141,9 @@ export default function AcceptInvitationPage({
                 <Building2 className="text-primary h-6 w-6" />
               </div>
             </div>
-            <CardTitle className="text-xl">You're Invited!</CardTitle>
+            <CardTitle className="text-xl">You&rsquo;re Invited!</CardTitle>
             <CardDescription>
-              You've been invited to join{" "}
+              You&rsquo;ve been invited to join{" "}
               <strong>{invitation.organization.name}</strong>
             </CardDescription>
           </CardHeader>
@@ -172,7 +190,7 @@ export default function AcceptInvitationPage({
 
             <div className="text-center">
               <p className="text-muted-foreground text-xs">
-                By accepting, you'll be able to collaborate with the team
+                By accepting, you&rsquo;ll be able to collaborate with the team
               </p>
             </div>
           </CardContent>

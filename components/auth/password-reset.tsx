@@ -24,7 +24,7 @@ export function PasswordReset() {
       <CardHeader>
         <CardTitle className="text-lg md:text-xl">Reset Password</CardTitle>
         <CardDescription className="text-xs md:text-sm">
-          Enter your email address and we'll send you a reset link
+          Enter your email address and we&rsquo;ll send you a reset link
         </CardDescription>
       </CardHeader>
       <CardContent>

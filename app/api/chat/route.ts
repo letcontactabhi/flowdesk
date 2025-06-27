@@ -3,7 +3,7 @@ import OpenAI from "openai"
 import { PrismaClient } from "@/lib/generated/prisma"
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY || "sk-dummy-key-for-build",
 })
 
 const prisma = new PrismaClient()

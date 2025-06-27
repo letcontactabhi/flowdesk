@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { MessageCircle, X, Send, Bot, User } from "lucide-react"
+import { MessageCircle, X, Send, Bot } from "lucide-react"
 
 interface Message {
   id: string
@@ -25,7 +25,6 @@ interface ChatWidgetProps {
 
 export function ChatWidget({
   organizationId,
-  primaryColor,
   welcomeMessage = "Hi! How can I help you today?",
   isOpen = false,
   onToggle,

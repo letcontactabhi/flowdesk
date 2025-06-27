@@ -6,7 +6,7 @@ async function initDatabase() {
 
     // This will create the necessary tables for Better Auth
     await auth.api.getSession({
-      headers: {},
+      headers: new Headers(),
     })
 
     console.log("✅ Database initialized successfully!")

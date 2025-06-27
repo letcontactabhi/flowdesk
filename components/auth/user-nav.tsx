@@ -15,7 +15,7 @@ import {
   useSession,
   sendVerificationEmail,
 } from "@/lib/auth-client"
-import Link from "next/link"
+// import Link from "next/link"
 
 export function UserNav() {
   const { data: session, isPending } = useSession()

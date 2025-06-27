@@ -14,7 +14,7 @@ async function sendEmail(to: string, subject: string, html: string) {
   }
 
   try {
-    const { Resend } = require("resend")
+    const { Resend } = await import("resend")
     const resend = new Resend(process.env.RESEND_API_KEY)
 
     const result = await resend.emails.send({
@@ -41,7 +41,7 @@ export const auth = betterAuth({
     requireEmailVerification: process.env.NODE_ENV === "production", // Require in production
     minPasswordLength: 8,
     maxPasswordLength: 128,
-    sendResetPassword: async ({ user, url, token }, request) => {
+    sendResetPassword: async ({ user, url }) => {
       await sendEmail(
         user.email,
         "Reset your password",
@@ -67,7 +67,7 @@ export const auth = betterAuth({
     resetPasswordTokenExpiresIn: 3600, // 1 hour
   },
   emailVerification: {
-    sendVerificationEmail: async ({ user, url, token }, request) => {
+    sendVerificationEmail: async ({ user, url }) => {
       // Replace the domain with shortreel.cc for verification emails
       const verificationUrl = url.replace(
         /^https?:\/\/[^\/]+/,
