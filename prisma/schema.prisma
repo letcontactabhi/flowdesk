@@ -1,0 +1,254 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Better Auth Models
+
+model User {
+  id            String   @id @default(cuid())
+  name          String?
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+
+  members     Member[]
+  invitations Invitation[]
+
+  @@map("users")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+  @@map("accounts")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  activeOrganizationId String?
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+
+model Verification {
+  id         String    @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@map("verification")
+}
+
+model Organization {
+  id          String       @id
+  name        String
+  slug        String?
+  logo        String?
+  createdAt   DateTime
+  metadata    String?
+  members     Member[]
+  invitations Invitation[]
+
+  // Flowdesk specific
+  chatWidgets     ChatWidget[]
+  conversations   Conversation[]
+  aiAgents        AIAgent[]
+  knowledgeBase   KnowledgeBaseItem[]
+  analytics       Analytics[]
+
+  @@unique([slug])
+  @@map("organization")
+}
+
+model Member {
+  id             String       @id
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String
+  createdAt      DateTime
+
+  @@map("member")
+}
+
+model Invitation {
+  id             String       @id
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  role           String?
+  status         String
+  expiresAt      DateTime
+  inviterId      String
+  user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+
+  @@map("invitation")
+}
+
+// Flowdesk Core Models
+
+model ChatWidget {
+  id             String @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  name           String
+  embedCode      String @unique
+  primaryColor   String @default("#3B82F6")
+  welcomeMessage String @default("Hi! How can I help you today?")
+  isActive       Boolean @default(true)
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  conversations  Conversation[]
+
+  @@map("chat_widgets")
+}
+
+model Conversation {
+  id             String @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  chatWidgetId   String?
+  chatWidget     ChatWidget? @relation(fields: [chatWidgetId], references: [id])
+  
+  customerEmail  String?
+  customerName   String?
+  status         String @default("active") // active, resolved, escalated
+  channel        String @default("widget") // widget, email, slack, api
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  messages       Message[]
+
+  @@map("conversations")
+}
+
+model Message {
+  id             String @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  content        String
+  role           String // user, assistant, system
+  isFromAI       Boolean @default(false)
+  confidence     Float? // AI confidence score
+  
+  createdAt      DateTime @default(now())
+
+  @@map("messages")
+}
+
+model AIAgent {
+  id             String @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  name           String
+  description    String?
+  systemPrompt   String
+  model          String @default("gpt-4o-mini")
+  temperature    Float @default(0.7)
+  maxTokens      Int @default(1000)
+  
+  isActive       Boolean @default(true)
+  isDefault      Boolean @default(false)
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("ai_agents")
+}
+
+model KnowledgeBaseItem {
+  id             String @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  title          String
+  content        String
+  type           String @default("article") // article, faq, procedure
+  category       String?
+  tags           String? // JSON array of tags
+  
+  isPublic       Boolean @default(true)
+  priority       Int @default(0)
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("knowledge_base_items")
+}
+
+model Analytics {
+  id               String @id @default(cuid())
+  organizationId   String
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  date             DateTime
+  totalConversations Int @default(0)
+  resolvedByAI     Int @default(0)
+  escalatedToHuman Int @default(0)
+  avgResponseTime  Float? // in seconds
+  customerSatisfaction Float? // rating 1-5
+  
+  createdAt        DateTime @default(now())
+
+  @@unique([organizationId, date])
+  @@map("analytics")
+}
