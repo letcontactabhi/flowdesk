@@ -12,23 +12,67 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
-import { authClient } from "@/lib/auth-client"
+import { authClient, organization } from "@/lib/auth-client"
 import Link from "next/link"
+import { toast } from "sonner"
+import { OnboardingDialog } from "@/components/onboarding-dialog"
+import { useRouter } from "next/navigation"
 
 export function SignUp() {
+  const router = useRouter()
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [passwordConfirmation, setPasswordConfirmation] = useState("")
+
   const [loading, setLoading] = useState(false)
+  const [showOnboarding, setShowOnboarding] = useState(false)
+
+  const handleSignUp = async () => {
+    if (password !== passwordConfirmation) {
+      toast.error("Passwords don't match")
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      // Create the user account
+      const signUpResult = await authClient.signUp.email({
+        email,
+        password,
+        name: `${firstName} ${lastName}`,
+      })
+
+      if (signUpResult.error) {
+        throw new Error(signUpResult.error.message)
+      }
+
+      toast.success("Account created successfully!")
+
+      // Show onboarding dialog
+      setShowOnboarding(true)
+    } catch (error: unknown) {
+      console.error("Signup error:", error)
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create account"
+      )
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleOnboardingComplete = () => {
+    router.push("/dashboard")
+  }
 
   return (
     <Card className="max-w-md">
       <CardHeader>
         <CardTitle className="text-lg md:text-xl">Sign Up</CardTitle>
         <CardDescription className="text-xs md:text-sm">
-          Enter your information to create an account
+          Create your account to get started with Flowdesk
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -72,6 +116,7 @@ export function SignUp() {
               value={email}
             />
           </div>
+
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
             <Input
@@ -98,29 +143,12 @@ export function SignUp() {
             type="submit"
             className="w-full"
             disabled={loading}
-            onClick={async () => {
-              await authClient.signUp.email(
-                {
-                  email,
-                  password,
-                  name: `${firstName} ${lastName}`,
-                  callbackURL: "/dashboard",
-                },
-                {
-                  onRequest: () => {
-                    setLoading(true)
-                  },
-                  onResponse: () => {
-                    setLoading(false)
-                  },
-                }
-              )
-            }}
+            onClick={handleSignUp}
           >
             {loading ? (
               <Loader2 size={16} className="animate-spin" />
             ) : (
-              "Create an account"
+              "Create account"
             )}
           </Button>
 
@@ -132,6 +160,12 @@ export function SignUp() {
           </div>
         </div>
       </CardContent>
+
+      <OnboardingDialog
+        open={showOnboarding}
+        onOpenChange={setShowOnboarding}
+        onComplete={handleOnboardingComplete}
+      />
     </Card>
   )
 }

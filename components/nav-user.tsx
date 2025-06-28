@@ -2,16 +2,17 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
+import { useTheme } from "next-themes"
 import {
   BadgeCheck,
-  Check,
-  ChevronsUpDown,
   LogOut,
-  Plus,
   Settings,
-  UserPlus,
   Monitor,
   User,
+  Plus,
+  Sun,
+  Moon,
+  Laptop,
 } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -31,7 +32,9 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { SettingsDialog } from "@/components/settings-dialog"
+import { CreateTeamPopover } from "@/components/create-team-popover"
 import { authClient, useSession } from "@/lib/auth-client"
 import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -39,14 +42,33 @@ import { Skeleton } from "@/components/ui/skeleton"
 export function NavUser() {
   const { data: session, isPending, error } = useSession()
   const { isMobile } = useSidebar()
+  const { setTheme, theme } = useTheme()
   const router = useRouter()
   const [showSettings, setShowSettings] = React.useState(false)
   const [dropdownOpen, setDropdownOpen] = React.useState(false)
+  const [showCreateTeam, setShowCreateTeam] = React.useState(false)
   const [isLoggingOut, setIsLoggingOut] = React.useState(false)
 
   const handleSettingsClick = () => {
     setShowSettings(true)
     setDropdownOpen(false) // Close dropdown when opening settings
+  }
+
+  const handleCreateTeamClick = () => {
+    setShowCreateTeam(true)
+    setDropdownOpen(false) // Close dropdown when opening create team
+  }
+
+  const handleTeamCreated = () => {
+    setShowCreateTeam(false)
+    // Refresh to show the new team
+    window.location.reload()
+  }
+
+  const handleThemeChange = (newTheme: string) => {
+    if (newTheme) {
+      setTheme(newTheme)
+    }
   }
 
   const handleLogout = async () => {
@@ -86,7 +108,6 @@ export function NavUser() {
               <Skeleton className="h-4 w-24" />
               <Skeleton className="h-3 w-32" />
             </div>
-            <ChevronsUpDown className="ml-auto size-4 opacity-50" />
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
@@ -142,11 +163,10 @@ export function NavUser() {
                     {user.email}
                   </span>
                 </div>
-                <ChevronsUpDown className="ml-auto size-4" />
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              className="w-64 rounded-lg"
+              className="w-56 rounded-lg"
               side={isMobile ? "bottom" : "right"}
               align="start"
               sideOffset={4}
@@ -165,7 +185,7 @@ export function NavUser() {
                       {displayName}
                     </span>
                     <span className="text-muted-foreground truncate text-xs">
-                      Free Plan • 1 member
+                      {user.email}
                       {user.emailVerified && (
                         <span className="ml-2 inline-flex items-center">
                           <BadgeCheck className="h-3 w-3 text-green-600" />
@@ -176,71 +196,79 @@ export function NavUser() {
                 </div>
               </DropdownMenuLabel>
 
-              {/* Action Buttons */}
-              <div className="flex gap-1 px-3 pb-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-7 flex-1 text-xs"
-                  onClick={handleSettingsClick}
-                  disabled={isLoggingOut}
-                >
-                  <Settings className="mr-1 h-3 w-3" />
-                  Settings
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-7 flex-1 text-xs"
-                  disabled={isLoggingOut}
-                >
-                  <UserPlus className="mr-1 h-3 w-3" />
-                  Invite
-                </Button>
-              </div>
-
               <DropdownMenuSeparator />
 
-              {/* Current User (with check) */}
-              <DropdownMenuItem className="px-3 py-1.5">
-                <Avatar className="mr-2 h-5 w-5 rounded">
-                  <AvatarImage src={user.image || ""} alt={displayName} />
-                  <AvatarFallback className="rounded text-xs">
-                    {userInitials}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="flex-1 text-sm">{displayName}</span>
-                <Check className="h-3 w-3 text-green-600" />
-              </DropdownMenuItem>
-
-              <DropdownMenuSeparator />
-
-              {/* Workspace Actions */}
+              {/* User Actions */}
               <DropdownMenuGroup>
                 <DropdownMenuItem
                   className="px-3 py-1.5 text-sm"
+                  onClick={handleSettingsClick}
                   disabled={isLoggingOut}
                 >
-                  <Plus className="mr-2 h-3 w-3" />
-                  New workspace
+                  <Settings className="mr-2 h-3 w-3" />
+                  Settings
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="px-3 py-1.5 text-sm"
-                  disabled={isLoggingOut}
+
+                <CreateTeamPopover
+                  open={showCreateTeam}
+                  onOpenChange={setShowCreateTeam}
+                  onTeamCreated={handleTeamCreated}
                 >
-                  Create work account
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="px-3 py-1.5 text-sm"
-                  disabled={isLoggingOut}
-                >
-                  Add another account
-                </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="px-3 py-1.5 text-sm"
+                    onSelect={(e) => {
+                      e.preventDefault()
+                      handleCreateTeamClick()
+                    }}
+                    disabled={isLoggingOut}
+                  >
+                    <Plus className="mr-2 h-3 w-3" />
+                    Create Team
+                  </DropdownMenuItem>
+                </CreateTeamPopover>
               </DropdownMenuGroup>
 
               <DropdownMenuSeparator />
 
-              {/* Bottom Actions */}
+              <DropdownMenuGroup>
+                <div className="flex w-full flex-row items-center justify-between px-3 py-2">
+                  <span className="text-sm">Theme</span>
+                  <ToggleGroup
+                    type="single"
+                    value={theme || "system"}
+                    onValueChange={handleThemeChange}
+                    className="ml-auto"
+                    size="sm"
+                    variant="outline"
+                  >
+                    <ToggleGroupItem
+                      value="light"
+                      aria-label="Light theme"
+                      className="h-6 w-8"
+                    >
+                      <Sun className="h-2.5 w-2.5" />
+                    </ToggleGroupItem>
+                    <ToggleGroupItem
+                      value="dark"
+                      aria-label="Dark theme"
+                      className="h-6 w-8"
+                    >
+                      <Moon className="h-2.5 w-2.5" />
+                    </ToggleGroupItem>
+                    <ToggleGroupItem
+                      value="system"
+                      aria-label="System theme"
+                      className="h-6 w-8"
+                    >
+                      <Laptop className="h-2.5 w-2.5" />
+                    </ToggleGroupItem>
+                  </ToggleGroup>
+                </div>
+              </DropdownMenuGroup>
+
+              <DropdownMenuSeparator />
+
+              {/* Logout */}
               <DropdownMenuGroup>
                 <DropdownMenuItem
                   className="px-3 py-1.5 text-sm focus:bg-red-50 focus:text-red-600 dark:focus:bg-red-950 dark:focus:text-red-400"
@@ -249,13 +277,6 @@ export function NavUser() {
                 >
                   <LogOut className="mr-2 h-3 w-3" />
                   {isLoggingOut ? "Logging out..." : "Log out"}
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="px-3 py-1.5 text-sm"
-                  disabled={isLoggingOut}
-                >
-                  <Monitor className="mr-2 h-3 w-3" />
-                  Get Mac app
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>

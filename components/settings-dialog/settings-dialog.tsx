@@ -34,13 +34,13 @@ import { BillingPage } from "./billing"
 import { IntegrationsPage } from "./integrations"
 import { NotificationsPage } from "./notifications"
 import { SecurityPage } from "./security"
-import { TeamsPage } from "./teams"
+import { MembersPage } from "./members"
 
 const data = {
   nav: [
     { name: "General", icon: Settings },
     { name: "Account", icon: Home },
-    { name: "Teams", icon: Users },
+    { name: "Members", icon: Users },
     { name: "Billing", icon: Check },
     { name: "Integrations", icon: Link },
     { name: "Notifications", icon: Bell },
@@ -105,7 +105,7 @@ export function SettingsDialog({
             <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 pt-0">
               {activeTab === "General" && <GeneralPage />}
               {activeTab === "Account" && <AccountPage />}
-              {activeTab === "Teams" && <TeamsPage />}
+              {activeTab === "Members" && <MembersPage />}
               {activeTab === "Billing" && <BillingPage />}
               {activeTab === "Integrations" && <IntegrationsPage />}
               {activeTab === "Notifications" && <NotificationsPage />}
