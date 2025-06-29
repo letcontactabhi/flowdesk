@@ -51,11 +51,20 @@ const data = {
 export function SettingsDialog({
   open,
   onOpenChange,
+  initialTab = "General",
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
+  initialTab?: string
 }) {
-  const [activeTab, setActiveTab] = React.useState("General")
+  const [activeTab, setActiveTab] = React.useState(initialTab)
+
+  // Update active tab when initialTab changes
+  React.useEffect(() => {
+    if (open) {
+      setActiveTab(initialTab)
+    }
+  }, [open, initialTab])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

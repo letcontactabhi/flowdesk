@@ -13,6 +13,8 @@ import {
   Sun,
   Moon,
   Laptop,
+  Home,
+  CreditCard,
 } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -34,7 +36,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { SettingsDialog } from "@/components/settings-dialog"
-import { CreateTeamPopover } from "@/components/create-team-popover"
+import { CreateTeamDialog, useCreateTeamDialog } from "./create-team-popover"
 import { authClient, useSession } from "@/lib/auth-client"
 import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -45,22 +47,35 @@ export function NavUser() {
   const { setTheme, theme } = useTheme()
   const router = useRouter()
   const [showSettings, setShowSettings] = React.useState(false)
+  const [settingsTab, setSettingsTab] = React.useState("General")
   const [dropdownOpen, setDropdownOpen] = React.useState(false)
-  const [showCreateTeam, setShowCreateTeam] = React.useState(false)
   const [isLoggingOut, setIsLoggingOut] = React.useState(false)
+  const createTeamDialog = useCreateTeamDialog()
 
   const handleSettingsClick = () => {
+    setSettingsTab("General")
+    setShowSettings(true)
+    setDropdownOpen(false) // Close dropdown when opening settings
+  }
+
+  const handleAccountClick = () => {
+    setSettingsTab("Account")
+    setShowSettings(true)
+    setDropdownOpen(false) // Close dropdown when opening settings
+  }
+
+  const handleBillingClick = () => {
+    setSettingsTab("Billing")
     setShowSettings(true)
     setDropdownOpen(false) // Close dropdown when opening settings
   }
 
   const handleCreateTeamClick = () => {
-    setShowCreateTeam(true)
-    setDropdownOpen(false) // Close dropdown when opening create team
+    setDropdownOpen(false) // Close dropdown first
+    createTeamDialog.openDialog() // Then open the dialog
   }
 
   const handleTeamCreated = () => {
-    setShowCreateTeam(false)
     // Refresh to show the new team
     window.location.reload()
   }
@@ -209,29 +224,38 @@ export function NavUser() {
                   Settings
                 </DropdownMenuItem>
 
-                <CreateTeamPopover
-                  open={showCreateTeam}
-                  onOpenChange={setShowCreateTeam}
-                  onTeamCreated={handleTeamCreated}
+                <DropdownMenuItem
+                  className="px-3 py-1.5 text-sm"
+                  onClick={handleAccountClick}
+                  disabled={isLoggingOut}
                 >
-                  <DropdownMenuItem
-                    className="px-3 py-1.5 text-sm"
-                    onSelect={(e) => {
-                      e.preventDefault()
-                      handleCreateTeamClick()
-                    }}
-                    disabled={isLoggingOut}
-                  >
-                    <Plus className="mr-2 h-3 w-3" />
-                    Create Team
-                  </DropdownMenuItem>
-                </CreateTeamPopover>
+                  <Home className="mr-2 h-3 w-3" />
+                  Account
+                </DropdownMenuItem>
+
+                <DropdownMenuItem
+                  className="px-3 py-1.5 text-sm"
+                  onClick={handleBillingClick}
+                  disabled={isLoggingOut}
+                >
+                  <CreditCard className="mr-2 h-3 w-3" />
+                  Billing
+                </DropdownMenuItem>
+
+                <DropdownMenuItem
+                  className="px-3 py-1.5 text-sm"
+                  disabled={isLoggingOut}
+                  onClick={handleCreateTeamClick}
+                >
+                  <Plus className="mr-2 h-3 w-3" />
+                  Create Team
+                </DropdownMenuItem>
               </DropdownMenuGroup>
 
               <DropdownMenuSeparator />
 
               <DropdownMenuGroup>
-                <div className="flex w-full flex-row items-center justify-between px-3 py-2">
+                <div className="flex w-full flex-row items-center justify-between px-3 py-1">
                   <span className="text-sm">Theme</span>
                   <ToggleGroup
                     type="single"
@@ -284,7 +308,16 @@ export function NavUser() {
         </SidebarMenuItem>
       </SidebarMenu>
 
-      <SettingsDialog open={showSettings} onOpenChange={setShowSettings} />
+      <SettingsDialog
+        open={showSettings}
+        onOpenChange={setShowSettings}
+        initialTab={settingsTab}
+      />
+      <CreateTeamDialog
+        open={createTeamDialog.open}
+        onOpenChange={createTeamDialog.setOpen}
+        onSuccess={handleTeamCreated}
+      />
     </>
   )
 }

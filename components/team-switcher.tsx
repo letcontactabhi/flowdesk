@@ -18,7 +18,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { CreateTeamPopover } from "@/components/create-team-popover"
+import { CreateTeamDialog, useCreateTeamDialog } from "./create-team-popover"
 import {
   useActiveOrganization,
   useListOrganizations,
@@ -32,23 +32,25 @@ export function TeamSwitcher() {
   const { data: organizations } = useListOrganizations()
   const { isMobile } = useSidebar()
   const [dropdownOpen, setDropdownOpen] = React.useState(false)
-  const [isCreatingTeam, setIsCreatingTeam] = React.useState(false)
+  const createTeamDialog = useCreateTeamDialog()
 
   const handleTeamCreated = () => {
-    setIsCreatingTeam(false)
-    setDropdownOpen(false)
-    // Refresh the page to show the new team
     window.location.reload()
+  }
+
+  const handleCreateTeamClick = () => {
+    setDropdownOpen(false) // Close dropdown first
+    createTeamDialog.openDialog() // Then open the dialog
   }
 
   const handleSwitchOrganization = async (orgId: string) => {
     try {
       await organization.setActive({ organizationId: orgId })
-      toast.success("Workspace switched successfully!")
+      toast.success("Team switched successfully!")
       setDropdownOpen(false)
     } catch (error: unknown) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to switch workspace"
+        error instanceof Error ? error.message : "Failed to switch team"
       )
     }
   }
@@ -79,16 +81,7 @@ export function TeamSwitcher() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu
-          open={dropdownOpen}
-          onOpenChange={(open) => {
-            // Don't close dropdown if we're creating a team
-            if (!open && isCreatingTeam) {
-              return
-            }
-            setDropdownOpen(open)
-          }}
-        >
+        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
@@ -164,33 +157,25 @@ export function TeamSwitcher() {
             <DropdownMenuSeparator />
 
             {/* Create team option */}
-            <CreateTeamPopover
-              open={isCreatingTeam}
-              onOpenChange={setIsCreatingTeam}
-              onTeamCreated={handleTeamCreated}
+            <DropdownMenuItem
+              className="gap-2 p-2"
+              onClick={handleCreateTeamClick}
             >
-              <DropdownMenuItem
-                className="gap-2 p-2"
-                onSelect={(e) => {
-                  e.preventDefault()
-                  setIsCreatingTeam(true)
-                }}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setIsCreatingTeam(true)
-                }}
-              >
-                <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
-                  <Plus className="size-4" />
-                </div>
-                <div className="text-muted-foreground font-medium">
-                  Create team
-                </div>
-              </DropdownMenuItem>
-            </CreateTeamPopover>
+              <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
+                <Plus className="size-4" />
+              </div>
+              <div className="text-muted-foreground font-medium">
+                Create team
+              </div>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
+      <CreateTeamDialog
+        open={createTeamDialog.open}
+        onOpenChange={createTeamDialog.setOpen}
+        onSuccess={handleTeamCreated}
+      />
     </SidebarMenu>
   )
 }
