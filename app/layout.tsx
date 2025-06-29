@@ -11,6 +11,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "flowdesk - Made for SaaS founders who care about their customers",
   description: "flowdesk that turns support chats into AI agents.",
+  icons: {
+    icon: "/branding/logo.svg",
+    apple: "/branding/logo.svg",
+  },
 }
 
 export default function RootLayout({

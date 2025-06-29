@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { ChevronsUpDown, Plus, Users, Building2, Check } from "lucide-react"
+import Image from "next/image"
 
 import {
   DropdownMenu,
@@ -87,8 +88,14 @@ export function TeamSwitcher() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                <Building2 className="size-4" />
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-gray-100 text-gray-700">
+                <Image
+                  src="/branding/logo.svg"
+                  alt="flowdesk logo"
+                  width={16}
+                  height={16}
+                  className="text-gray-700"
+                />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{displayName}</span>
@@ -114,8 +121,13 @@ export function TeamSwitcher() {
             {/* Current active team */}
             {activeOrganization && (
               <DropdownMenuItem className="gap-2 p-2">
-                <div className="bg-sidebar-primary/10 flex size-6 items-center justify-center rounded-md border">
-                  <Building2 className="text-sidebar-primary size-3.5" />
+                <div className="flex size-6 items-center justify-center rounded-md border bg-gray-100">
+                  <Image
+                    src="/branding/logo.svg"
+                    alt="flowdesk logo"
+                    width={14}
+                    height={14}
+                  />
                 </div>
                 <div className="flex-1">
                   <div className="font-medium">{activeOrganization.name}</div>

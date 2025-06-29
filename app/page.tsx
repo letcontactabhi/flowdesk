@@ -16,6 +16,7 @@ import {
   Zap,
   TrendingDown,
 } from "lucide-react"
+import Image from "next/image"
 
 export default function Home() {
   return (
@@ -24,7 +25,13 @@ export default function Home() {
       <header className="w-full border-b">
         <div className="mx-auto flex h-12 max-w-5xl items-center justify-between border-r border-l px-6">
           <div className="flex items-center gap-2">
-            <Bot className="text-primary size-6" />
+            <Image
+              src="/branding/logo.svg"
+              alt="flowdesk logo"
+              width={24}
+              height={24}
+              className="text-primary"
+            />
             <h1 className="text-2xl font-bold">flowdesk</h1>
           </div>
           <div className="flex items-center">
@@ -106,7 +113,13 @@ export default function Home() {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <Card className="shadow-none">
               <CardContent className="flex flex-col items-center space-y-2 p-4 text-center">
-                <Bot className="text-primary size-6" />
+                <Image
+                  src="/branding/logo.svg"
+                  alt="Instant Responses"
+                  width={24}
+                  height={24}
+                  className="text-primary"
+                />
                 <CardTitle className="text-muted-foreground text-base">
                   Instant Responses
                 </CardTitle>

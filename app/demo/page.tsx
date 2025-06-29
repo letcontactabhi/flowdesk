@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card"
 import { ChatWidget } from "@/components/chat-widget"
 import { Bot, MessageCircle, Zap } from "lucide-react"
+import Image from "next/image"
 
 export default function DemoPage() {
   const [isChatOpen, setIsChatOpen] = useState(false)
@@ -22,7 +23,13 @@ export default function DemoPage() {
         <div className="mx-auto max-w-7xl px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Bot className="text-primary h-8 w-8" />
+              <Image
+                src="/branding/logo.svg"
+                alt="Acme Support logo"
+                width={32}
+                height={32}
+                className="text-primary"
+              />
               <h1 className="text-2xl font-bold">Acme Support</h1>
             </div>
             <nav className="flex gap-6">

@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { MessageCircle, X, Send, Bot } from "lucide-react"
+import Image from "next/image"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 interface Message {
   id: string
@@ -170,7 +172,16 @@ export function ChatWidget({
                 >
                   <div className="flex items-start gap-2">
                     {message.role === "assistant" && (
-                      <Bot className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                      <Avatar className="h-8 w-8">
+                        <AvatarFallback className="bg-muted">
+                          <Image
+                            src="/branding/logo.svg"
+                            alt="AI Assistant"
+                            width={16}
+                            height={16}
+                          />
+                        </AvatarFallback>
+                      </Avatar>
                     )}
                     <div className="text-sm">{message.content}</div>
                   </div>
@@ -186,7 +197,16 @@ export function ChatWidget({
               <div className="flex justify-start">
                 <div className="max-w-[80%] rounded-lg bg-gray-100 p-3">
                   <div className="flex items-center gap-2">
-                    <Bot className="h-4 w-4" />
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback className="bg-muted">
+                        <Image
+                          src="/branding/logo.svg"
+                          alt="AI Assistant"
+                          width={16}
+                          height={16}
+                        />
+                      </AvatarFallback>
+                    </Avatar>
                     <div className="flex space-x-1">
                       <div className="h-2 w-2 animate-bounce rounded-full bg-gray-400"></div>
                       <div
@@ -206,7 +226,13 @@ export function ChatWidget({
           </div>
 
           <div className="flex-shrink-0 border-t p-4">
-            <div className="flex gap-2">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                sendMessage()
+              }}
+              className="flex space-x-2"
+            >
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -216,17 +242,23 @@ export function ChatWidget({
                 className="flex-1"
               />
               <Button
-                onClick={sendMessage}
+                type="submit"
                 disabled={!input.trim() || isLoading}
                 size="sm"
                 className="bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 <Send className="h-4 w-4" />
               </Button>
+            </form>
+            <div className="text-muted-foreground mt-2 flex items-center space-x-2 text-xs">
+              <Image
+                src="/branding/logo.svg"
+                alt="Powered by flowdesk"
+                width={12}
+                height={12}
+              />
+              <span>Powered by flowdesk</span>
             </div>
-            <p className="mt-2 text-center text-xs text-gray-500">
-              Powered by flowdesk AI
-            </p>
           </div>
         </CardContent>
       </Card>

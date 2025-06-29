@@ -11,6 +11,7 @@ import {
   BarChart3,
   Zap,
 } from "lucide-react"
+import Image from "next/image"
 
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"

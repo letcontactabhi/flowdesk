@@ -82,12 +82,6 @@ const INTEGRATIONS: Integration[] = [
     description: "Connect your Gmail account to Ferndesk.",
     connected: false,
   },
-  {
-    id: "custom",
-    name: "Support endpoint",
-    description: "Connect your ticketing system to Ferndesk.",
-    connected: false,
-  },
 ]
 
 // Components
