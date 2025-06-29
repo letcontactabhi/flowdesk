@@ -68,7 +68,7 @@ export function SettingsDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[80vh] overflow-hidden p-0 md:max-w-[800px] lg:max-w-[800px]">
+      <DialogContent className="max-h-[95vh] overflow-hidden p-0 md:max-w-[800px] lg:max-w-5xl">
         <DialogTitle className="sr-only">Settings</DialogTitle>
         <DialogDescription className="sr-only">
           Customize your settings here.
