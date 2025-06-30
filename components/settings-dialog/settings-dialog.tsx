@@ -1,7 +1,16 @@
 "use client"
 
 import * as React from "react"
-import { Bell, Check, Home, Link, Lock, Settings, Users } from "lucide-react"
+import {
+  Bell,
+  Check,
+  CreditCard,
+  Home,
+  Link,
+  Lock,
+  Settings,
+  Users,
+} from "lucide-react"
 
 import {
   Breadcrumb,
@@ -35,6 +44,7 @@ import { IntegrationsPage } from "./integrations"
 import { NotificationsPage } from "./notifications"
 import { SecurityPage } from "./security"
 import { MembersPage } from "./members"
+import { PlansPage } from "./plans"
 
 const data = {
   nav: [
@@ -42,6 +52,7 @@ const data = {
     { name: "Account", icon: Home },
     { name: "Members", icon: Users },
     { name: "Billing", icon: Check },
+    { name: "Plans", icon: CreditCard },
     { name: "Integrations", icon: Link },
     { name: "Notifications", icon: Bell },
     { name: "Security", icon: Lock },
@@ -116,6 +127,7 @@ export function SettingsDialog({
               {activeTab === "Account" && <AccountPage />}
               {activeTab === "Members" && <MembersPage />}
               {activeTab === "Billing" && <BillingPage />}
+              {activeTab === "Plans" && <PlansPage />}
               {activeTab === "Integrations" && <IntegrationsPage />}
               {activeTab === "Notifications" && <NotificationsPage />}
               {activeTab === "Security" && <SecurityPage />}

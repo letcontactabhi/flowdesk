@@ -33,11 +33,6 @@ const data = {
       url: "#",
       icon: Search,
     },
-    {
-      title: "Integrations",
-      url: "#",
-      icon: Zap,
-    },
   ],
   mainNav: [
     {
@@ -47,29 +42,19 @@ const data = {
       isActive: true,
     },
     {
-      title: "Live Chats",
-      url: "#",
-      icon: MessageSquare,
-    },
-    {
       title: "AI Agents",
       url: "#",
       icon: Bot,
     },
     {
-      title: "Knowledge Base",
+      title: "Support Inbox",
       url: "#",
-      icon: BookOpen,
+      icon: MessageSquare,
     },
     {
       title: "Analytics",
       url: "#",
       icon: BarChart3,
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings,
     },
   ],
 }
