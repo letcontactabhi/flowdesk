@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import Image from "next/image"
+import { IntegrationLogo } from "@/components/integration-logo"
 
 // Types
 interface Integration {
@@ -8,35 +8,6 @@ interface Integration {
   name: string
   description: string
   connected: boolean
-}
-
-interface IntegrationLogoProps {
-  integration: Integration
-}
-
-// Configuration
-const INTEGRATION_LOGOS: Record<string, string> = {
-  fernand: "/integration-logo/fernand.svg",
-  intercom: "/integration-logo/Intercom.svg",
-  helpscout: "/integration-logo/HelpScout.svg",
-  zendesk: "/integration-logo/Zendesk.svg",
-  missive: "/integration-logo/missiveapp.com.svg",
-  crisp: "/integration-logo/Crisp Logo.svg",
-  gmail: "/integration-logo/gmail.svg",
-}
-
-const INTEGRATION_BACKGROUNDS: Record<string, string> = {
-  zendesk: "bg-[#03363D]",
-  intercom: "bg-black",
-  fernand: "bg-white",
-  helpscout: "bg-white",
-  missive: "bg-white",
-  crisp: "bg-white",
-  gmail: "bg-white",
-}
-
-const FALLBACK_ICONS: Record<string, string> = {
-  custom: "🔧",
 }
 
 const INTEGRATIONS: Integration[] = [
@@ -85,36 +56,6 @@ const INTEGRATIONS: Integration[] = [
 ]
 
 // Components
-function IntegrationLogo({ integration }: IntegrationLogoProps) {
-  const logoPath = INTEGRATION_LOGOS[integration.id]
-
-  if (logoPath) {
-    const backgroundClasses =
-      INTEGRATION_BACKGROUNDS[integration.id] || "bg-white border-gray-100"
-
-    return (
-      <div
-        className={`flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border p-2 ${backgroundClasses}`}
-      >
-        <Image
-          src={logoPath}
-          alt={`${integration.name} logo`}
-          width={32}
-          height={32}
-          className="object-contain"
-        />
-      </div>
-    )
-  }
-
-  // Fallback for integrations without logos
-  return (
-    <div className="bg-muted flex h-12 w-12 items-center justify-center rounded-lg">
-      <span className="text-xl">{FALLBACK_ICONS[integration.id] || "📦"}</span>
-    </div>
-  )
-}
-
 function IntegrationCard({ integration }: { integration: Integration }) {
   const handleConnect = () => {
     console.log(`Connecting to ${integration.id}`)
@@ -124,7 +65,11 @@ function IntegrationCard({ integration }: { integration: Integration }) {
     <Card className="border p-4 shadow-none">
       <div className="space-y-3 text-start">
         <div className="flex justify-start">
-          <IntegrationLogo integration={integration} />
+          <IntegrationLogo
+            integrationId={integration.id}
+            integrationName={integration.name}
+            size="lg"
+          />
         </div>
 
         <div className="space-y-1">

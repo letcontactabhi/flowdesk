@@ -42,7 +42,7 @@ import {
   X,
 } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
+import { IntegrationLogo } from "@/components/integration-logo"
 import { useState } from "react"
 
 const dataSourceChannels = [
@@ -88,28 +88,28 @@ const dataSources = [
     id: "intercom",
     name: "Intercom",
     description: "Import chat history and tickets",
-    logo: "/integration-logo/Intercom.svg",
+    logo: "/integration-logo/intercom.svg",
     category: "support",
   },
   {
     id: "zendesk",
     name: "Zendesk",
     description: "Import support tickets and conversations",
-    logo: "/integration-logo/Zendesk.svg",
+    logo: "/integration-logo/zendesk.svg",
     category: "support",
   },
   {
     id: "helpscout",
     name: "HelpScout",
     description: "Import customer conversations",
-    logo: "/integration-logo/HelpScout.svg",
+    logo: "/integration-logo/helpscout.svg",
     category: "support",
   },
   {
     id: "crisp",
     name: "Crisp",
     description: "Import chat conversations",
-    logo: "/integration-logo/Crisp Logo.svg",
+    logo: "/integration-logo/crisp-logo.svg",
     category: "support",
   },
   {
@@ -123,7 +123,7 @@ const dataSources = [
     id: "missive",
     name: "Missive",
     description: "Import team conversations",
-    logo: "/integration-logo/missiveapp.com.svg",
+    logo: "/integration-logo/missive.svg",
     category: "support",
   },
   {
@@ -250,25 +250,14 @@ export default function CreateAgentPage() {
                                 onClick={() => toggleSource(source.id)}
                               >
                                 <div className="flex items-start gap-2">
-                                  <div
-                                    className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md border transition-colors ${
-                                      selectedSources.includes(source.id)
-                                        ? "border-primary/20 bg-primary/10"
-                                        : "border-gray-200 bg-white group-hover:border-gray-300"
-                                    }`}
-                                  >
-                                    {source.logo ? (
-                                      <Image
-                                        src={source.logo}
-                                        alt={source.name}
-                                        width={16}
-                                        height={16}
-                                        className="h-4 w-4 object-contain"
-                                      />
-                                    ) : (
-                                      <MessageCircle className="text-muted-foreground h-4 w-4" />
+                                  <IntegrationLogo
+                                    integrationId={source.id}
+                                    integrationName={source.name}
+                                    size="md"
+                                    selected={selectedSources.includes(
+                                      source.id
                                     )}
-                                  </div>
+                                  />
                                   <div className="min-w-0 flex-1">
                                     <h3 className="mb-1 text-xs leading-tight font-medium">
                                       {source.name}
@@ -311,15 +300,11 @@ export default function CreateAgentPage() {
                                     key={sourceId}
                                     className="inline-flex items-center gap-1 rounded-full bg-black px-2 py-1 text-xs font-medium text-white"
                                   >
-                                    {source.logo && (
-                                      <Image
-                                        src={source.logo}
-                                        alt={source.name}
-                                        width={12}
-                                        height={12}
-                                        className="h-3 w-3 object-contain"
-                                      />
-                                    )}
+                                    <IntegrationLogo
+                                      integrationId={source.id}
+                                      integrationName={source.name}
+                                      variant="chip"
+                                    />
                                     <span>{source.name}</span>
                                     <button
                                       onClick={(e) => {
@@ -391,12 +376,6 @@ export default function CreateAgentPage() {
                       </span>
                       <span className="font-medium">
                         {selectedSources.length}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Setup time:</span>
-                      <span className="font-medium text-green-600">
-                        ~5-15 min
                       </span>
                     </div>
                   </div>
