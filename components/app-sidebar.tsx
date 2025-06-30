@@ -42,8 +42,8 @@ const data = {
       isActive: true,
     },
     {
-      title: "AI Agents",
-      url: "#",
+      title: "Agents",
+      url: "/agents",
       icon: Bot,
     },
     {
