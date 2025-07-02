@@ -18,6 +18,11 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
@@ -33,15 +38,16 @@ import {
   Link2,
   Settings,
   ArrowLeft,
+  ChevronDown,
+  User,
+  Brain,
+  MessageSquare,
+  Shield,
+  Bell,
+  Webhook,
+  Globe,
 } from "lucide-react"
 import Link from "next/link"
-import { AgentPlayground } from "@/components/agents/agent-playground"
-import { AgentActivity } from "@/components/agents/agent-activity"
-import { AgentSources } from "@/components/agents/agent-sources"
-import { AgentActions } from "@/components/agents/agent-actions"
-import { AgentContacts } from "@/components/agents/agent-contacts"
-import { AgentConnect } from "@/components/agents/agent-connect"
-import { AgentSettings } from "@/components/agents/agent-settings"
 
 // Mock agent data
 const agent = {
@@ -80,7 +86,7 @@ export default function AgentDetailPage({
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="/agents">AI Agents</BreadcrumbLink>
+                  <BreadcrumbLink href="/agents">agents</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
@@ -90,97 +96,174 @@ export default function AgentDetailPage({
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="flex items-center gap-4">
-            <Link href="/agents">
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back
-              </Button>
-            </Link>
-            <div className="flex items-center gap-3">
-              <Bot className="text-primary h-8 w-8" />
-              <div>
-                <h1 className="text-2xl font-bold">{agent.name}</h1>
-                <p className="text-muted-foreground">{agent.description}</p>
-              </div>
-            </div>
-            <div className="ml-auto flex items-center gap-2">
-              <div
-                className={`rounded-full px-3 py-1 text-sm font-medium ${
-                  agent.status === "active"
-                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                    : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
-                }`}
-              >
-                {agent.status}
-              </div>
-            </div>
-          </div>
+        <div className="flex flex-1 flex-col gap-6 p-4 pt-0">
+          <p className="text-muted-foreground">
+            Manage your agent's configuration, monitor performance, and test
+            interactions in real-time.
+          </p>
 
-          <Tabs defaultValue="playground" className="space-y-4">
-            <TabsList className="grid w-full max-w-4xl grid-cols-7">
-              <TabsTrigger
-                value="playground"
-                className="flex items-center gap-2"
-              >
-                <Play className="h-4 w-4" />
-                <span className="hidden sm:inline">Playground</span>
-              </TabsTrigger>
-              <TabsTrigger value="activity" className="flex items-center gap-2">
-                <Activity className="h-4 w-4" />
-                <span className="hidden sm:inline">Activity</span>
-              </TabsTrigger>
-              <TabsTrigger value="sources" className="flex items-center gap-2">
-                <Database className="h-4 w-4" />
-                <span className="hidden sm:inline">Sources</span>
-              </TabsTrigger>
-              <TabsTrigger value="actions" className="flex items-center gap-2">
-                <Zap className="h-4 w-4" />
-                <span className="hidden sm:inline">Actions</span>
-              </TabsTrigger>
-              <TabsTrigger value="contacts" className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                <span className="hidden sm:inline">Contacts</span>
-              </TabsTrigger>
-              <TabsTrigger value="connect" className="flex items-center gap-2">
-                <Link2 className="h-4 w-4" />
-                <span className="hidden sm:inline">Connect</span>
-              </TabsTrigger>
-              <TabsTrigger value="settings" className="flex items-center gap-2">
-                <Settings className="h-4 w-4" />
-                <span className="hidden sm:inline">Settings</span>
-              </TabsTrigger>
-            </TabsList>
+          <Card className="flex h-full flex-col shadow-none">
+            <CardHeader></CardHeader>
+            <CardContent className="flex-1">
+              <Tabs defaultValue="playground" className="w-full">
+                <TabsList className="mb-4 grid w-full grid-cols-6">
+                  <TabsTrigger value="playground" className="text-sm">
+                    Playground
+                  </TabsTrigger>
+                  <TabsTrigger value="activity" className="text-sm">
+                    Activity
+                  </TabsTrigger>
+                  <TabsTrigger value="analytics" className="text-sm">
+                    Analytics
+                  </TabsTrigger>
+                  <TabsTrigger value="sources" className="text-sm">
+                    Sources
+                  </TabsTrigger>
+                  <TabsTrigger value="actions" className="text-sm">
+                    Actions
+                  </TabsTrigger>
+                  <TabsTrigger value="settings" className="text-sm">
+                    Settings
+                  </TabsTrigger>
+                </TabsList>
 
-            <TabsContent value="playground">
-              <AgentPlayground agent={agent} />
-            </TabsContent>
+                <TabsContent value="playground" className="mt-4">
+                  {/* Playground content */}
+                </TabsContent>
 
-            <TabsContent value="activity">
-              <AgentActivity agent={agent} />
-            </TabsContent>
+                <TabsContent value="activity" className="mt-4">
+                  {/* Activity content */}
+                </TabsContent>
 
-            <TabsContent value="sources">
-              <AgentSources agent={agent} />
-            </TabsContent>
+                <TabsContent value="analytics" className="mt-4">
+                  {/* Analytics content */}
+                </TabsContent>
 
-            <TabsContent value="actions">
-              <AgentActions agent={agent} />
-            </TabsContent>
+                <TabsContent value="sources" className="mt-4">
+                  {/* Sources content */}
+                </TabsContent>
 
-            <TabsContent value="contacts">
-              <AgentContacts agent={agent} />
-            </TabsContent>
+                <TabsContent value="actions" className="mt-4">
+                  {/* Actions content */}
+                </TabsContent>
 
-            <TabsContent value="connect">
-              <AgentConnect agent={agent} />
-            </TabsContent>
+                <TabsContent value="settings" className="mt-4 space-y-4">
+                  <div className="space-y-4">
+                    <Collapsible>
+                      <CollapsibleTrigger className="hover:bg-muted/50 flex w-full items-center justify-between rounded-lg border px-4 py-3 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <User className="h-4 w-4" />
+                          <span className="font-medium">General</span>
+                        </div>
+                        <ChevronDown className="h-4 w-4" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="px-4 pb-4">
+                        <p className="text-muted-foreground text-sm">
+                          Configure basic agent settings, name, and description.
+                        </p>
+                      </CollapsibleContent>
+                    </Collapsible>
 
-            <TabsContent value="settings">
-              <AgentSettings agent={agent} />
-            </TabsContent>
-          </Tabs>
+                    <Collapsible>
+                      <CollapsibleTrigger className="hover:bg-muted/50 flex w-full items-center justify-between rounded-lg border px-4 py-3 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <Brain className="h-4 w-4" />
+                          <span className="font-medium">AI</span>
+                        </div>
+                        <ChevronDown className="h-4 w-4" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="px-4 pb-4">
+                        <p className="text-muted-foreground text-sm">
+                          Configure AI model, training data, and behavior
+                          parameters.
+                        </p>
+                      </CollapsibleContent>
+                    </Collapsible>
+
+                    <Collapsible>
+                      <CollapsibleTrigger className="hover:bg-muted/50 flex w-full items-center justify-between rounded-lg border px-4 py-3 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <MessageSquare className="h-4 w-4" />
+                          <span className="font-medium">Chat Interface</span>
+                        </div>
+                        <ChevronDown className="h-4 w-4" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="px-4 pb-4">
+                        <p className="text-muted-foreground text-sm">
+                          Customize chat appearance, branding, and user
+                          interface options.
+                        </p>
+                      </CollapsibleContent>
+                    </Collapsible>
+
+                    <Collapsible>
+                      <CollapsibleTrigger className="hover:bg-muted/50 flex w-full items-center justify-between rounded-lg border px-4 py-3 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <Shield className="h-4 w-4" />
+                          <span className="font-medium">Security</span>
+                        </div>
+                        <ChevronDown className="h-4 w-4" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="px-4 pb-4">
+                        <p className="text-muted-foreground text-sm">
+                          Manage access controls, API keys, and security
+                          policies.
+                        </p>
+                      </CollapsibleContent>
+                    </Collapsible>
+
+                    <Collapsible>
+                      <CollapsibleTrigger className="hover:bg-muted/50 flex w-full items-center justify-between rounded-lg border px-4 py-3 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <Bell className="h-4 w-4" />
+                          <span className="font-medium">Notifications</span>
+                        </div>
+                        <ChevronDown className="h-4 w-4" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="px-4 pb-4">
+                        <p className="text-muted-foreground text-sm">
+                          Configure email alerts, escalation rules, and
+                          notification preferences.
+                        </p>
+                      </CollapsibleContent>
+                    </Collapsible>
+
+                    <Collapsible>
+                      <CollapsibleTrigger className="hover:bg-muted/50 flex w-full items-center justify-between rounded-lg border px-4 py-3 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <Webhook className="h-4 w-4" />
+                          <span className="font-medium">Webhooks</span>
+                        </div>
+                        <ChevronDown className="h-4 w-4" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="px-4 pb-4">
+                        <p className="text-muted-foreground text-sm">
+                          Set up webhook endpoints for external integrations and
+                          events.
+                        </p>
+                      </CollapsibleContent>
+                    </Collapsible>
+
+                    <Collapsible>
+                      <CollapsibleTrigger className="hover:bg-muted/50 flex w-full items-center justify-between rounded-lg border px-4 py-3 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <Globe className="h-4 w-4" />
+                          <span className="font-medium">Custom Domains</span>
+                        </div>
+                        <ChevronDown className="h-4 w-4" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="px-4 pb-4">
+                        <p className="text-muted-foreground text-sm">
+                          Configure custom domains and white-label chat widget
+                          embedding.
+                        </p>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
         </div>
       </SidebarInset>
     </SidebarProvider>
