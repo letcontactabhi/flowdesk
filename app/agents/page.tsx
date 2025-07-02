@@ -74,7 +74,7 @@ export default function AIAgentsPage() {
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="flex flex-1 flex-col gap-4 p-4">
           <div className="flex items-center justify-between">
             <p className="text-muted-foreground">
               Create and manage agents to automate your customer support

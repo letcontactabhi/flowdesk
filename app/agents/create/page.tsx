@@ -188,7 +188,7 @@ export default function CreateAgentPage() {
           </div>
         </header>
 
-        <div className="flex flex-1 flex-col gap-6 p-4 pt-0">
+        <div className="flex flex-1 flex-col gap-6 p-4">
           <p className="text-muted-foreground">
             Create your agent by connecting your data sources and training it on
             your data.
