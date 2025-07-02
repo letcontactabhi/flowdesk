@@ -1,17 +1,10 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bot, Send, User } from "lucide-react"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Bot, RotateCcw, Send, Smile } from "lucide-react"
 import React, { useState } from "react"
 
 interface AgentPlaygroundProps {
@@ -34,7 +27,7 @@ const initialMessages: Message[] = [
   {
     id: "1",
     type: "bot" as const,
-    content: "Hello! I'm your AI assistant. How can I help you today?",
+    content: "Hi! What can I help you with?",
     timestamp: new Date(),
   },
 ]
@@ -79,65 +72,80 @@ export function AgentPlayground({ agent }: AgentPlaygroundProps) {
     }
   }
 
+  const handleRefresh = () => {
+    setMessages(initialMessages)
+    setInput("")
+    setIsLoading(false)
+  }
+
   return (
-    <div className="grid gap-4 lg:grid-cols-3">
-      <div className="lg:col-span-2">
-        <Card className="flex h-[600px] flex-col">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Bot className="h-5 w-5" />
-              Test Your Agent
-            </CardTitle>
-            <CardDescription>
-              Try out queries to see how your AI agent responds
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-1 flex-col gap-4">
-            <ScrollArea className="flex-1 rounded-md border p-4">
-              <div className="space-y-4">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex gap-3 ${
-                      message.type === "user" ? "justify-end" : "justify-start"
-                    }`}
-                  >
-                    {message.type === "bot" && (
-                      <Avatar className="h-8 w-8">
-                        <AvatarFallback>
-                          <Bot className="h-4 w-4" />
-                        </AvatarFallback>
-                      </Avatar>
-                    )}
-                    <div
-                      className={`max-w-[80%] rounded-lg p-3 ${
-                        message.type === "user"
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted"
-                      }`}
-                    >
-                      <p className="text-sm">{message.content}</p>
-                      <p className="mt-1 text-xs opacity-70">
-                        {message.timestamp.toLocaleTimeString()}
-                      </p>
-                    </div>
-                    {message.type === "user" && (
-                      <Avatar className="h-8 w-8">
-                        <AvatarFallback>
-                          <User className="h-4 w-4" />
-                        </AvatarFallback>
-                      </Avatar>
-                    )}
-                  </div>
-                ))}
-                {isLoading && (
-                  <div className="flex justify-start gap-3">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback>
+    <div className="mx-auto h-full max-w-md">
+      <div className="bg-card border-border flex h-full flex-col overflow-hidden rounded-2xl border shadow-lg">
+        {/* Header */}
+        <div className="bg-card border-border flex items-center justify-between border-b px-4 py-3">
+          <div className="flex items-center gap-2">
+            <div className="h-2 w-2 rounded-full bg-red-500"></div>
+            <div className="h-2 w-2 rounded-full bg-yellow-500"></div>
+            <div className="h-2 w-2 rounded-full bg-green-500"></div>
+          </div>
+          <div className="text-foreground text-sm font-medium">
+            {agent.name}
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleRefresh}
+            className="hover:bg-muted h-8 w-8 p-0"
+          >
+            <RotateCcw className="text-muted-foreground h-4 w-4" />
+          </Button>
+        </div>
+
+        {/* Chat Area */}
+        <div className="flex flex-1 flex-col bg-white">
+          <ScrollArea className="flex-1 p-4">
+            <div className="space-y-4">
+              {messages.map((message) => (
+                <div key={message.id} className="flex items-start gap-3">
+                  {message.type === "bot" && (
+                    <Avatar className="bg-muted h-8 w-8 flex-shrink-0">
+                      <AvatarFallback className="bg-muted text-muted-foreground">
                         <Bot className="h-4 w-4" />
                       </AvatarFallback>
                     </Avatar>
-                    <div className="bg-muted rounded-lg p-3">
+                  )}
+                  <div className="flex-1">
+                    {message.type === "bot" && (
+                      <div className="text-foreground mb-1 text-sm font-medium">
+                        {agent.name}
+                      </div>
+                    )}
+                    <div
+                      className={`inline-block max-w-[85%] rounded-2xl px-4 py-2 ${
+                        message.type === "user"
+                          ? "bg-primary text-primary-foreground ml-auto"
+                          : "bg-card text-foreground border-border border"
+                      }`}
+                    >
+                      <p className="text-sm leading-relaxed">
+                        {message.content}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {isLoading && (
+                <div className="flex items-start gap-3">
+                  <Avatar className="bg-muted h-8 w-8 flex-shrink-0">
+                    <AvatarFallback className="bg-muted text-muted-foreground">
+                      <Bot className="h-4 w-4" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1">
+                    <div className="text-foreground mb-1 text-sm font-medium">
+                      {agent.name}
+                    </div>
+                    <div className="bg-card border-border inline-block rounded-2xl border px-4 py-2">
                       <div className="flex gap-1">
                         <div className="bg-muted-foreground h-2 w-2 animate-bounce rounded-full" />
                         <div
@@ -151,70 +159,48 @@ export function AgentPlayground({ agent }: AgentPlaygroundProps) {
                       </div>
                     </div>
                   </div>
-                )}
-              </div>
-            </ScrollArea>
-            <div className="flex gap-2">
+                </div>
+              )}
+            </div>
+          </ScrollArea>
+
+          {/* Footer */}
+          <div className="border-border bg-card border-t px-4 py-2">
+            <div className="mb-2 flex items-center justify-center">
+              <span className="text-muted-foreground flex items-center gap-1 text-xs">
+                <Bot className="h-3 w-3" />
+                Powered by flowdesk
+              </span>
+            </div>
+
+            {/* Input Area */}
+            <div className="bg-muted border-border flex items-center gap-2 rounded-full border px-3 py-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="hover:bg-muted h-8 w-8 flex-shrink-0 p-0"
+              >
+                <Smile className="text-muted-foreground h-4 w-4" />
+              </Button>
               <Input
-                placeholder="Type your message..."
+                placeholder="Message..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
                 disabled={isLoading}
+                className="placeholder:text-muted-foreground flex-1 border-0 bg-transparent px-0 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
               />
               <Button
                 onClick={handleSend}
                 disabled={isLoading || !input.trim()}
+                size="sm"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground h-8 w-8 flex-shrink-0 rounded-full p-0"
               >
                 <Send className="h-4 w-4" />
               </Button>
             </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="space-y-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Agent Info</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div>
-              <p className="text-sm font-medium">Name</p>
-              <p className="text-muted-foreground text-sm">{agent.name}</p>
-            </div>
-            <div>
-              <p className="text-sm font-medium">Description</p>
-              <p className="text-muted-foreground text-sm">
-                {agent.description}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Sample Questions</CardTitle>
-            <CardDescription>Try these example queries</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {[
-              "How do I reset my password?",
-              "What are your business hours?",
-              "How can I cancel my subscription?",
-              "Do you offer refunds?",
-            ].map((question, index) => (
-              <Button
-                key={index}
-                variant="outline"
-                className="h-auto w-full justify-start p-3 text-left"
-                onClick={() => setInput(question)}
-              >
-                {question}
-              </Button>
-            ))}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   )

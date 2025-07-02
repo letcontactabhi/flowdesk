@@ -1,0 +1,7 @@
+export { GeneralSettings } from "./general-settings"
+export { AISettings } from "./ai-settings"
+export { ChatInterfaceSettings } from "./chat-interface-settings"
+export { SecuritySettings } from "./security-settings"
+export { NotificationsSettings } from "./notifications-settings"
+export { WebhooksSettings } from "./webhooks-settings"
+export { CustomDomainsSettings } from "./custom-domains-settings"
