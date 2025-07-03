@@ -81,7 +81,7 @@ export default function AIAgentsPage() {
             </p>
             <Link href="/agents/create">
               <Button>
-                <Plus className="mr-2 h-4 w-4" />
+                <Plus className="mr-1 size-4" />
                 New agent
               </Button>
             </Link>
@@ -133,7 +133,7 @@ export default function AIAgentsPage() {
               </p>
               <Link href="/agents/create">
                 <Button>
-                  <Plus className="mr-2 h-4 w-4" />
+                  <Plus className="mr-1 size-4" />
                   Create your first agent
                 </Button>
               </Link>
