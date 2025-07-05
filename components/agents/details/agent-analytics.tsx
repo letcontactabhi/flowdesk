@@ -15,15 +15,8 @@ interface AgentAnalyticsProps {
 export function AgentAnalytics({ agent }: AgentAnalyticsProps) {
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold">Performance Analytics</h2>
-        <p className="text-muted-foreground">
-          Monitor CSAT scores, deflection rates, and response times.
-        </p>
-      </div>
-
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card className="shadow-none">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Total Conversations
@@ -38,7 +31,7 @@ export function AgentAnalytics({ agent }: AgentAnalyticsProps) {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-none">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Response Rate</CardTitle>
             <BarChart3 className="text-muted-foreground h-4 w-4" />
@@ -49,7 +42,7 @@ export function AgentAnalytics({ agent }: AgentAnalyticsProps) {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-none">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Avg Response Time
@@ -64,7 +57,7 @@ export function AgentAnalytics({ agent }: AgentAnalyticsProps) {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-none">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Fallback Rate</CardTitle>
             <Users className="text-muted-foreground h-4 w-4" />
@@ -78,7 +71,7 @@ export function AgentAnalytics({ agent }: AgentAnalyticsProps) {
 
       {/* Placeholder for charts */}
       <div className="grid gap-4 md:grid-cols-2">
-        <Card>
+        <Card className="shadow-none">
           <CardHeader>
             <CardTitle>Conversation Volume</CardTitle>
           </CardHeader>
@@ -89,7 +82,7 @@ export function AgentAnalytics({ agent }: AgentAnalyticsProps) {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="shadow-none">
           <CardHeader>
             <CardTitle>Response Time Trend</CardTitle>
           </CardHeader>
