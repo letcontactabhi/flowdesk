@@ -43,14 +43,14 @@ import { BillingPage } from "./billing"
 import { IntegrationsPage } from "./integrations"
 import { NotificationsPage } from "./notifications"
 import { SecurityPage } from "./security"
-import { MembersPage } from "./members"
+// MVP: Members page removed
 import { PlansPage } from "./plans"
 
 const data = {
   nav: [
     { name: "General", icon: Settings },
     { name: "Account", icon: Home },
-    { name: "Members", icon: Users },
+    // MVP: Members removed
     { name: "Billing", icon: Check },
     { name: "Plans", icon: CreditCard },
     { name: "Integrations", icon: Link },
@@ -125,7 +125,7 @@ export function SettingsDialog({
             <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 pt-0">
               {activeTab === "General" && <GeneralPage />}
               {activeTab === "Account" && <AccountPage />}
-              {activeTab === "Members" && <MembersPage />}
+              {/* MVP: Members page removed */}
               {activeTab === "Billing" && <BillingPage />}
               {activeTab === "Plans" && <PlansPage />}
               {activeTab === "Integrations" && <IntegrationsPage />}

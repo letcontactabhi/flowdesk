@@ -24,30 +24,14 @@ import {
 import { Bot, Plus, Calendar } from "lucide-react"
 import Link from "next/link"
 
-// Mock data for agents
-const agents = [
-  {
-    id: "1",
-    name: "Customer Support Agent",
-    description: "Handles customer inquiries and support tickets",
-    lastActive: "2 hours ago",
-    status: "active",
-  },
-  {
-    id: "2",
-    name: "Sales Assistant",
-    description: "Helps with product questions and sales inquiries",
-    lastActive: "5 minutes ago",
-    status: "active",
-  },
-  {
-    id: "3",
-    name: "Technical Support",
-    description: "Assists with technical issues and troubleshooting",
-    lastActive: "1 day ago",
-    status: "inactive",
-  },
-]
+// MVP: Single default agent trained on Gmail data
+const defaultAgent = {
+  id: "default",
+  name: "Gmail Support Agent", 
+  description: "AI agent trained on your Gmail support conversations",
+  lastActive: "Active now",
+  status: "active",
+}
 
 export default function AIAgentsPage() {
   return (
@@ -77,68 +61,49 @@ export default function AIAgentsPage() {
         <div className="flex flex-1 flex-col gap-4 p-4">
           <div className="flex items-center justify-between">
             <p className="text-muted-foreground">
-              Create and manage agents to automate your customer support
+              Your AI agent trained on Gmail support conversations
             </p>
-            <Link href="/agents/create">
-              <Button>
-                <Plus className="mr-1 size-4" />
-                New agent
-              </Button>
-            </Link>
           </div>
 
           <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {agents.map((agent) => (
-              <Link key={agent.id} href={`/agents/${agent.id}`}>
-                <Card className="hover:bg-muted/50 h-32 w-full cursor-pointer shadow-none transition-colors">
-                  <CardHeader className="px-4 pt-4 pb-2">
-                    <div className="mb-2 flex items-center justify-between">
-                      <Bot className="text-primary h-6 w-6" />
-                      <div
-                        className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                          agent.status === "active"
-                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                            : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
-                        }`}
-                      >
-                        {agent.status}
-                      </div>
+            {/* MVP: Simple Gmail agent card - no complex detail page */}
+            <Card className="hover:bg-muted/50 h-32 w-full shadow-none border-2">
+                <CardHeader className="px-4 pt-4 pb-2">
+                  <div className="mb-2 flex items-center justify-between">
+                    <Bot className="text-primary h-6 w-6" />
+                    <div className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full px-2 py-0.5 text-xs font-medium">
+                      {defaultAgent.status}
                     </div>
-                    <CardTitle className="truncate text-base leading-tight">
-                      {agent.name}
-                    </CardTitle>
-                    <CardDescription className="truncate text-sm leading-tight">
-                      {agent.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="px-4 pt-0 pb-4">
-                    <div className="text-muted-foreground flex items-center gap-2 text-xs">
-                      <Calendar className="h-3 w-3" />
-                      <span className="truncate">
-                        Last active {agent.lastActive}
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+                  </div>
+                  <CardTitle className="truncate text-base leading-tight">
+                    {defaultAgent.name}
+                  </CardTitle>
+                  <CardDescription className="truncate text-sm leading-tight">
+                    {defaultAgent.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="px-4 pt-0 pb-4">
+                  <div className="text-muted-foreground flex items-center gap-2 text-xs">
+                    <Calendar className="h-3 w-3" />
+                    <span className="truncate">
+                      {defaultAgent.lastActive}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
           </div>
 
-          {agents.length === 0 && (
-            <Card className="flex flex-col items-center justify-center p-8 text-center">
-              <Bot className="text-muted-foreground mb-4 h-12 w-12" />
-              <h3 className="mb-2 text-lg font-semibold">No agents yet</h3>
-              <p className="text-muted-foreground mb-4">
-                Create your first AI agent to start automating customer support
-              </p>
-              <Link href="/agents/create">
-                <Button>
-                  <Plus className="mr-1 size-4" />
-                  Create your first agent
-                </Button>
-              </Link>
-            </Card>
-          )}
+          {/* MVP: Gmail setup card */}
+          <Card className="flex flex-col items-center justify-center p-8 text-center border-2 border-dashed">
+            <Bot className="text-muted-foreground mb-4 h-12 w-12" />
+            <h3 className="mb-2 text-lg font-semibold">Connect Gmail to get started</h3>
+            <p className="text-muted-foreground mb-4">
+              Connect your Gmail account to train your AI agent on past support conversations
+            </p>
+            <Button>
+              Connect Gmail Account
+            </Button>
+          </Card>
         </div>
       </SidebarInset>
     </SidebarProvider>

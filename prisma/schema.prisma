@@ -28,8 +28,7 @@ model User {
   accounts Account[]
   sessions Session[]
 
-  members     Member[]
-  invitations Invitation[]
+  // MVP: Team management removed
 
   @@map("users")
 }
@@ -112,31 +111,7 @@ model Organization {
   @@map("organization")
 }
 
-model Member {
-  id             String       @id
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  userId         String
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role           String
-  createdAt      DateTime
-
-  @@map("member")
-}
-
-model Invitation {
-  id             String       @id
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  email          String
-  role           String?
-  status         String
-  expiresAt      DateTime
-  inviterId      String
-  user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
-
-  @@map("invitation")
-}
+// MVP: Member and Invitation models removed for single-user organizations
 
 // Flowdesk Core Models
 

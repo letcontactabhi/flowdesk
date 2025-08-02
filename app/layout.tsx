@@ -9,8 +9,8 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "flowdesk - Made for SaaS founders who care about their customers",
-  description: "flowdesk that turns support chats into AI agents.",
+  title: "flowdesk - Transform support into AI magic",
+  description: "Automate 80% of your customer support with intelligent AI agents. Reduce response time from hours to seconds while delighting your customers.",
   icons: {
     icon: "/branding/logo.svg",
     apple: "/branding/logo.svg",

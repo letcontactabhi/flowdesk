@@ -1,24 +1,12 @@
 import Image from "next/image"
 import { MessageCircle } from "lucide-react"
 
-// Configuration
+// MVP: Gmail-only configuration
 const INTEGRATION_LOGOS: Record<string, string> = {
-  fernand: "/integration-logo/fernand.svg",
-  intercom: "/integration-logo/intercom.svg",
-  helpscout: "/integration-logo/helpscout.svg",
-  zendesk: "/integration-logo/zendesk.svg",
-  missive: "/integration-logo/missive.svg",
-  crisp: "/integration-logo/crisp-logo.svg",
   gmail: "/integration-logo/gmail.svg",
 }
 
 const INTEGRATION_BACKGROUNDS: Record<string, string> = {
-  zendesk: "bg-[#03363D]",
-  intercom: "bg-black",
-  fernand: "bg-white",
-  helpscout: "bg-white",
-  missive: "bg-white",
-  crisp: "bg-white",
   gmail: "bg-white",
 }
 

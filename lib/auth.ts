@@ -109,36 +109,11 @@ export const auth = betterAuth({
   },
   plugins: [
     nextCookies(),
+    // MVP: Simplified organization - single user, no team invitations
     organization({
       allowUserToCreateOrganization: true,
-      organizationLimit: 5,
-      membershipLimit: 50,
-      invitationExpiresIn: 60 * 60 * 24 * 7, // 7 days
-      sendInvitationEmail: async (data) => {
-        const inviteLink = `${process.env.BETTER_AUTH_URL || "http://localhost:3000"}/accept-invitation/${data.id}`
-
-        await sendEmail(
-          data.email,
-          `You're invited to join ${data.organization.name}`,
-          `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2>You're Invited!</h2>
-            <p>Hi there,</p>
-            <p><strong>${data.inviter.user.name || data.inviter.user.email}</strong> has invited you to join <strong>${data.organization.name}</strong>.</p>
-            <div style="text-align: center; margin: 30px 0;">
-              <a href="${inviteLink}" 
-                 style="background-color: #007bff; color: white; padding: 12px 24px; 
-                        text-decoration: none; border-radius: 5px; display: inline-block;">
-                Accept Invitation
-              </a>
-            </div>
-            <p>This invitation will expire in 7 days.</p>
-            <p>If you don't want to join this organization, you can safely ignore this email.</p>
-            <p>Best regards,<br>Your App Team</p>
-          </div>
-          `
-        )
-      },
+      organizationLimit: 1, // MVP: Only one organization per user
+      membershipLimit: 1,   // MVP: Only the owner
     }),
   ],
   trustedOrigins: ["http://localhost:3000"],

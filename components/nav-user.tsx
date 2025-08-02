@@ -36,7 +36,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { SettingsDialog } from "@/components/settings-dialog"
-import { CreateTeamDialog, useCreateTeamDialog } from "./create-team-popover"
+// MVP: Team creation removed
 import { authClient, useSession } from "@/lib/auth-client"
 import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -50,7 +50,7 @@ export function NavUser() {
   const [settingsTab, setSettingsTab] = React.useState("General")
   const [dropdownOpen, setDropdownOpen] = React.useState(false)
   const [isLoggingOut, setIsLoggingOut] = React.useState(false)
-  const createTeamDialog = useCreateTeamDialog()
+  // MVP: Team creation removed
 
   const handleSettingsClick = () => {
     setSettingsTab("General")
@@ -70,15 +70,7 @@ export function NavUser() {
     setDropdownOpen(false) // Close dropdown when opening settings
   }
 
-  const handleCreateTeamClick = () => {
-    setDropdownOpen(false) // Close dropdown first
-    createTeamDialog.openDialog() // Then open the dialog
-  }
-
-  const handleTeamCreated = () => {
-    // Refresh to show the new team
-    window.location.reload()
-  }
+  // MVP: Team creation handlers removed
 
   const handleThemeChange = (newTheme: string) => {
     if (newTheme) {
@@ -242,14 +234,7 @@ export function NavUser() {
                   Billing
                 </DropdownMenuItem>
 
-                <DropdownMenuItem
-                  className="px-3 py-1.5 text-sm"
-                  disabled={isLoggingOut}
-                  onClick={handleCreateTeamClick}
-                >
-                  <Plus className="mr-2 h-3 w-3" />
-                  Create Team
-                </DropdownMenuItem>
+                {/* MVP: Create team option removed */}
               </DropdownMenuGroup>
 
               <DropdownMenuSeparator />
@@ -313,11 +298,7 @@ export function NavUser() {
         onOpenChange={setShowSettings}
         initialTab={settingsTab}
       />
-      <CreateTeamDialog
-        open={createTeamDialog.open}
-        onOpenChange={createTeamDialog.setOpen}
-        onSuccess={handleTeamCreated}
-      />
+      {/* MVP: Team creation dialog removed */}
     </>
   )
 }

@@ -1,213 +1,251 @@
-# Flowdesk – Product Requirements Document
+# Flowdesk – Product Requirements Document (MVP)
 
-_Version 0.3 · 27 Jun 2025_
+_Version 1.0 · Gmail-Focused MVP · January 2025_
 
 ---
 
-## 📑 Table of Contents
+## 📑 Table of Contents
 
 1. [Purpose](#1--purpose)
 2. [Problem](#2--problem)
-3. [Goals & Success Metrics](#3--goals--success-metrics)
-4. [MVP Scope](#4--mvp-scope)
-5. [Out‑of‑Scope](#5--out-of-scope)
-6. [Constraints & Risks](#6--constraints--risks)
-7. [Open Questions](#7--open-questions)
-8. [Roadmap Ideas](#8--roadmap-ideas)
-9. [Feature Specifications](#9--feature-specifications)
-10. [Architecture Snapshot](#10--architecture-snapshot)
-11. [Appendix](#11--appendix)
+3. [MVP Goals & Success Metrics](#3--mvp-goals--success-metrics)
+4. [MVP Scope](#4--mvp-scope)
+5. [Out-of-Scope](#5--out-of-scope)
+6. [Technical Specs](#6--technical-specs)
+7. [Success Criteria](#7--success-criteria)
 
 ---
 
 ## 1 · Purpose
 
-> **Flowdesk** turns repetitive support chats into an always‑on AI agent that deflects ≈ 80 % of tickets—without maintaining a help center.
+> **Flowdesk** turns your Gmail support history into an intelligent AI agent that deflects ≈70% of tickets—zero setup complexity, zero help center maintenance.
+
+**Core Value**: In under 10 minutes, connect Gmail → AI learns your support patterns → embed chat widget → customers get instant, contextual answers based on how YOU actually resolve issues.
+
+---
 
 ## 2 · Problem
 
-- **Repetitive questions** clog support queues.
-- **Help‑center upkeep** is time‑consuming and often out‑of‑date.
-- **24 / 7 coverage** requires expensive staffing or outsourcing.
+### Target User: Solo founders & small teams using Gmail for support
 
-## 3 · Goals & Success Metrics
+**Current Pain Points:**
+- **Gmail support is reactive**: Same questions over and over via email
+- **No 24/7 coverage**: Customers wait hours/days for simple answers
+- **Help centers are complex**: Creating & maintaining docs is time-consuming
+- **Gmail history is wasted**: Years of resolved conversations sit unused
 
-### 3.1 Quantitative Targets
-
-| Metric             | Target     | How Measured            |
-| ------------------ | ---------- | ----------------------- |
-| Ticket deflection  |  ≥ 80 %    | % tickets auto‑resolved |
-| Avg. response time |  ≤ 5 s     | Chat logs               |
-| CSAT (AI chats)    |  ≥ 4.5 / 5 | Post‑chat survey        |
-| Payback period     |  < 7 days  | Cost‑savings analysis   |
-
-### 3.2 Qualitative Goals
-
-- **< 15 min onboarding** using existing chat history only.
-- **“Feels human” replies**—minimal hallucinations; tone matches brand.
+**The Opportunity**: Gmail already contains your perfect support knowledge base—just need AI to learn from it.
 
 ---
 
-## 4 · MVP Scope
+## 3 · MVP Goals & Success Metrics
+
+### Success Metrics (30 days post-launch)
+
+| Metric                | Target      | How Measured                    |
+| --------------------- | ----------- | ------------------------------- |
+| **Setup Speed**       | < 10 min    | Signup → working chat widget    |
+| **Conversation Deflection** | ≥ 70%       | % auto-resolved without escalation |
+| **Response Time**     | ≤ 5s        | Chat widget performance logs    |
+| **User Satisfaction** | ≥ 4.0/5     | Simple thumbs up/down in chat   |
+| **Active Users**      | 50+ users   | Users with connected Gmail + active widget |
+
+### MVP Success Definition
+**"Can a user go from signup to working AI support in under 10 minutes, with AI that gives answers based on their actual Gmail support patterns?"**
+
+---
+
+## 4 · MVP Scope (Gmail-Only)
 
 ### 4.1 Core Features
 
-1. **Chat Ingestion** – Import & vectorize historical transcripts (Intercom, Zendesk, Gmail).
-2. **LLM Reply Engine** – Generate context‑aware answers + confidence score.
-3. **Fallback Routing** – Low‑confidence → human agent hand‑off.
-4. **Continuous Learning** – Retrain nightly on newly resolved tickets.
-5. **Dashboard** – Real‑time deflection, CSAT, cost‑savings.
+1. **🔐 Google OAuth Integration**
+   - One-click Gmail access (read-only)
+   - Auto-create organization on first signup
 
-### 4.2 Key User Stories
+2. **📧 Gmail History Import**
+   - Extract support email threads
+   - Identify Q&A patterns from resolved conversations
+   - Vectorize content for similarity search
 
-| Role          | “I need to…”                              | So that                          |
-| ------------- | ----------------------------------------- | -------------------------------- |
-| Support Lead  | Connect Intercom & cut repetitive tickets | Team handles only edge‑cases     |
-| Founder / COO | See real‑time cost savings                | Justify ROI & staffing decisions |
-| End‑Customer  | Get instant, accurate answers at 2 a.m.   | Solve my problem without waiting |
+3. **🤖 AI Response Engine**
+   - Search Gmail vectors for relevant context
+   - Generate responses using GPT-4o-mini
+   - Return contextual answers based on YOUR support style
 
-### 4.3 High‑Level User Flow
+4. **💬 Embeddable Chat Widget**
+   - Simple iframe embed for any website
+   - Clean UI with satisfaction feedback (👍👎)
+   - Mobile-responsive design
+
+5. **📊 Basic Analytics Dashboard**
+   - 4 core metrics: Deflection rate, Response time, CSAT, Total conversations
+   - 7-day and 30-day views
+   - CSV export for deeper analysis
+
+### 4.2 User Stories
+
+| User Type           | Need                                           | So That                                    |
+| ------------------- | ---------------------------------------------- | ------------------------------------------ |
+| **Solo Founder**    | Connect Gmail → instant AI support            | I focus on product, not repetitive emails |
+| **Small Team CEO**  | AI trained on our actual support conversations | Customers get consistent, brand-appropriate answers |
+| **Customer**        | Instant help based on past resolutions        | I don't wait hours for common questions    |
+
+### 4.3 MVP User Flow
 
 ```
-Admin signup → Connect chat source → Click **Train**
-          ↓
-    Data ingested & indexed (progress bar)
-          ↓
-  Drop‑in JS widget / SDK installed
-          ↓
- Customer asks question ↔ AI responds (< 5 s)
-          ↓
-Low confidence? → Seamless escalate to human
+1. Sign up (Google OAuth) → Auto-create organization
+2. Connect Gmail → Grant read-only access  
+3. Import emails → AI processes historical threads (progress bar)
+4. Get embed code → Add 3 lines to website
+5. Customer chats → AI searches Gmail context → Responds in <5s
 ```
 
-## 5 · Out‑of‑Scope
-
-- Voice / phone IVR.
-- Outsourced human‑agent marketplace.
-- Stand‑alone knowledge‑base authoring.
-
-## 6 · Constraints & Risks
-
-- **Privacy & Compliance** – GDPR, SOC 2, PII redaction.
-- **LLM Hallucinations** – Guardrails + human fallback.
-- **Initial Integrations** – Launch with Intercom, Zendesk & Gmail.
-
-## 7 · Open Questions
-
-1. Pricing model: per‑seat, per‑ticket, or savings‑share?
-2. Should replies include source citations?
-3. Multilingual support at launch or post‑MVP?
-
-## 8 · Roadmap Ideas (V2+)
-
-- Auto‑translate for global teams.
-- Brand‑tone fine‑tuning/voice cloning.
-- Generate & update help‑center articles from chats.
+**Success Path**: User completes entire flow in under 10 minutes with zero technical setup required.
 
 ---
 
-## 9 · Feature Specifications
+## 5 · Out-of-Scope (MVP)
 
-### 9.1 Chat Ingestion
+### ❌ Removed for Focus
+- **Multiple integrations** (Intercom, Zendesk, Slack) → Post-MVP
+- **Team management** (members, roles, invitations) → Post-MVP  
+- **Multiple AI agents** per organization → Post-MVP
+- **Complex analytics** (cost-savings, conversation sources) → Post-MVP
+- **Human escalation** workflows → Post-MVP
+- **Voice/phone support** → V2+
+- **Knowledge base creation** tools → V2+
 
-| Aspect         | Detail                                                               |
-| -------------- | -------------------------------------------------------------------- |
-| **Scope**      | Import transcripts + metadata (user ID, tags, resolution).           |
-| **APIs**       | Intercom REST, Zendesk REST, Gmail API.                              |
-| **Internal**   | `POST /api/sources`, `GET /api/import_status/{job_id}`.              |
-| **Edge Cases** | Malformed JSON, > 10 MB attachments, PII detection, API rate limits. |
-| **Done When**  | ≥ 95 % rows ingested & searchable; visible in dashboard.             |
-
-### 9.2 LLM Reply Engine
-
-| Aspect         | Detail                                                                     |
-| -------------- | -------------------------------------------------------------------------- |
-| **Scope**      | Use top‑k vectors + system prompt → `answer`, `confidence`, `tokens_used`. |
-| **LLMs**       | OpenAI GPT‑4o‑mini (primary), Anthropic Claude Haiku (fallback).           |
-| **Edge Cases** | Hallucinations, profanity, unsupported language.                           |
-| **Done When**  | P95 response ≤ 5 s; toxicity < 0.01.                                       |
-
-### 9.3 Fallback Routing
-
-| Aspect         | Detail                                                     |
-| -------------- | ---------------------------------------------------------- |
-| **Trigger**    | `confidence < 0.75` _or_ user types “agent”.               |
-| **Action**     | Transfer with full context; preserve transcript.           |
-| **Edge Cases** | No human online → queue & notify; infinite loop safeguard. |
-| **Done When**  | False‑positive escalations < 1 %.                          |
-
-### 9.4 Continuous Learning
-
-| Aspect         | Detail                                                               |
-| -------------- | -------------------------------------------------------------------- |
-| **Mechanism**  | Append resolved Q\&A pairs; nightly re‑vectorize delta via cron job. |
-| **Edge Cases** | Mass data deletion, vector drift.                                    |
-| **Done When**  | Deflection rate steady/increasing week‑over‑week.                    |
-
-### 9.5 Dashboard
-
-| Aspect         | Detail                                                         |
-| -------------- | -------------------------------------------------------------- |
-| **Scope**      | Live charts (Deflection %, CSAT, Savings, Tokens). CSV export. |
-| **Tech**       | Next.js · shadcn/ui · Recharts.                                |
-| **Edge Cases** | Data gap > 5 min, large date range.                            |
-| **Done When**  | P95 load < 1 s for 30‑day view.                                |
+### ✅ Post-MVP Roadmap
+- **Q2 2025**: Intercom & Zendesk integrations, team collaboration
+- **Q3 2025**: Human escalation, advanced analytics, multiple agents
+- **Q4 2025**: Voice integration, multi-language support
 
 ---
 
-## 10 · Architecture Snapshot
+## 6 · Technical Specs
 
-### 10.1 Component Map (text)
+### 6.1 Architecture
 
 ```
-React Client → HTTPS → FastAPI Gateway
-       ├─ Auth (BetterAuth → JWT)
-         ├─ Vector Service (Qdrant)
-         ├─ LLM Service (OpenAI / Claude wrapper)
-         └─ Postgres (users, orgs, metrics)
+Next.js 15 App (Frontend + API Routes)
+├─ Better Auth (Google OAuth + email/password)
+├─ Prisma ORM → SQLite (production: PostgreSQL)  
+├─ OpenAI GPT-4o-mini (AI responses)
+└─ Qdrant Cloud (vector storage & search)
 
-Background Workers (Celery + Redis)
-  └─ Ingestion & Continuous Learning
+Gmail API Integration
+└─ Background processing for email import
 
-Dashboard → TimescaleDB hypertables
-S3 Storage for attachments
+Embeddable Chat Widget  
+└─ React component (iframe embed)
 ```
 
-### 10.2 Tech Choices
+### 6.2 Tech Stack
 
-| Layer         | Primary                                | Backup / Rationale            |
-| ------------- | -------------------------------------- | ----------------------------- |
-| LLM           | OpenAI GPT‑4o‑mini                     | Claude Haiku via feature flag |
-| Vector DB     | Qdrant Cloud                           | Pinecone (GCP regions)        |
-| Infra         | AWS (ECS Fargate, ALB, CloudFront)     | Fly.io for dev tier           |
-| Observability | Grafana Cloud · Sentry · OpenTelemetry |                               |
+| Component       | Choice                | Rationale                     |
+| --------------- | --------------------- | ----------------------------- |
+| **Frontend**    | Next.js 15 + TypeScript | Full-stack, Vercel-optimized |
+| **Database**    | SQLite + Prisma      | Zero-config for MVP          |
+| **Auth**        | Better Auth           | Google OAuth built-in        |
+| **AI**          | OpenAI GPT-4o-mini    | Best price/performance        |
+| **Vector DB**   | Qdrant Cloud          | Managed, simple setup        |
+| **Deployment** | Vercel                | Zero-config Next.js hosting  |
 
-### 10.3 Data Privacy & Compliance
+### 6.3 Key API Endpoints
 
-- **Encryption** – TLS 1.3 in transit; AES‑256 at rest.
-- **PII Redaction** – Presidio before vectorization.
-- **User Deletion** – Cascade delete within 24 h.
-- **Audit Logs** – CloudTrail + S3 Object Lock.
+| Endpoint                    | Purpose                           |
+| --------------------------- | --------------------------------- |
+| `POST /api/gmail/connect`   | Initiate Gmail OAuth flow         |
+| `GET /api/gmail/import`     | Check email import status         |
+| `POST /api/chat`            | Process chat widget messages      |
+| `GET /api/analytics`        | Fetch dashboard metrics           |
 
-### 10.4 Reliability & Scaling
+### 6.4 Data Models (Simplified)
 
-- **SLO** – P95 latency < 5 s per reply.
-- Autoscale LLM pods on RPS.
-- Vector DB replicas per AZ.
-- Circuit‑breaker on LLM timeouts → escalate.
+```typescript
+// Core models for MVP
+User { id, email, name, createdAt }
+Organization { id, name, userId } // 1:1 with User for MVP
+AIAgent { id, orgId, name, systemPrompt } // One per org
+Conversation { id, orgId, status, createdAt }
+Message { id, conversationId, content, role, isFromAI }
+Analytics { id, orgId, date, totalConversations, resolvedByAI }
+```
 
-### 10.5 Cost of Goods (1 k tickets/day)
+### 6.5 Security & Privacy
 
-| Item                     | Monthly Cost                    |
-| ------------------------ | ------------------------------- |
-| OpenAI tokens (\~ 150 k) | ≈ \$90                          |
-| Qdrant (1 m vectors)     | \$50                            |
-| AWS (ECS + RDS + S3)     | \$120                           |
-| **Total**                | **≈ \$260 (\~ \$0.008/ticket)** |
+- **Gmail Access**: Read-only OAuth scope; emails encrypted at rest
+- **Data Retention**: User controls data; deleted on account closure
+- **API Security**: Rate limiting, CORS, input validation
+- **Compliance**: GDPR-ready (SOC 2 post-MVP)
 
 ---
 
-## 11 · Appendix
+## 7 · Success Criteria
 
-**Document Owner:** Abhi
-**Stakeholders:** Engineering · Design · Support Ops · Compliance
+### 7.1 Launch Readiness Checklist
+
+**Technical:**
+- [ ] Gmail OAuth working end-to-end
+- [ ] Email import processing ≥90% success rate
+- [ ] Chat widget embeddable on any website  
+- [ ] AI responses using Gmail conversation context
+- [ ] Analytics dashboard showing real-time metrics
+- [ ] Complete user flow under 10 minutes
+
+**Business:**
+- [ ] Pricing set at $49/month (profitable at 1k conversations)
+- [ ] Basic error handling & user feedback
+- [ ] Simple onboarding flow with progress indicators
+
+### 7.2 30-Day Post-Launch Goals
+
+**User Metrics:**
+- 50+ active users with Gmail connected
+- ≥70% conversation auto-resolution rate
+- <5s average AI response time
+- ≥4.0/5.0 customer satisfaction
+- 80%+ user completion rate (signup → working widget)
+
+**Business Metrics:**
+- Profitable unit economics at $49/month
+- <5% monthly churn rate
+- Positive user feedback & feature requests for V2
+
+### 7.3 MVP Cost Structure
+
+**Monthly Operating Costs (1k conversations):**
+- Vercel Pro: $20
+- OpenAI API: ~$50  
+- Qdrant Cloud: $25
+- **Total COGS: ~$95**
+
+**Target Pricing**: $49/month → Break-even at ~500 conversations, 50% margin at 1k.
+
+---
+
+## 8 · Implementation Priorities
+
+### Phase 1: Core Infrastructure (Week 1-2)
+1. Gmail OAuth integration
+2. Email import & processing pipeline
+3. Vector storage setup (Qdrant)
+
+### Phase 2: AI & Chat (Week 3-4)  
+4. AI response engine with Gmail context
+5. Chat widget component
+6. Basic analytics dashboard
+
+### Phase 3: Polish & Launch (Week 5-6)
+7. User onboarding flow
+8. Error handling & edge cases
+9. Performance optimization
+10. Launch preparation
+
+---
+
+**Document Owner**: Engineering Team  
+**Last Updated**: January 2025  
+**Status**: Ready to implement  
+**Next Review**: After MVP launch + 30 days
